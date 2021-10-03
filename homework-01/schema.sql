@@ -24,43 +24,48 @@
 
 -- Таблица школьников
 
-CREATE TABLE IF NOT EXISTS students (
-   id SERIAL PRIMARY KEY,              -- Идентификатор школьника
-   lname VARCHAR(50) NOT NULL,         -- Фамилия школьника
-   fname VARCHAR(50) NOT NULL,         -- Имя школьника
-   email VARCHAR(100) UNIQUE NOT NULL -- Контактный адрес электронной почты
+DROP TABLE IF EXISTS students CASCADE;
+CREATE TABLE students (
+   id INT GENERATED ALWAYS AS IDENTITY,   -- Идентификатор школьника
+   lname VARCHAR(50) NOT NULL,            -- Фамилия школьника
+   fname VARCHAR(50) NOT NULL,            -- Имя школьника
+   email VARCHAR(100) UNIQUE NOT NULL     -- Контактный адрес электронной почты
 );
 
 -- Таблица учителей
 
-CREATE TABLE IF NOT EXISTS teachers (
-   id SERIAL PRIMARY KEY,              -- Идентификатор учителя
-   lname VARCHAR(50) NOT NULL,         -- Фамилия учителя
-   fname VARCHAR(50) NOT NULL,         -- Имя учителя
-   email VARCHAR(100) UNIQUE NOT NULL -- Контактный адрес электронной почты
+DROP TABLE IF EXISTS teachers CASCADE;
+CREATE TABLE teachers (
+   id INT GENERATED ALWAYS AS IDENTITY,   -- Идентификатор учителя
+   lname VARCHAR(50) NOT NULL,            -- Фамилия учителя
+   fname VARCHAR(50) NOT NULL,            -- Имя учителя
+   email VARCHAR(100) UNIQUE NOT NULL     -- Контактный адрес электронной почты
 );
 
 -- Таблица научных направлений
 
-CREATE TABLE IF NOT EXISTS departments (
-   id SERIAL PRIMARY KEY,              -- Идентификатор научного направления
-   name VARCHAR(50),                   -- Название направления
-   description TEXT                    -- Описание тематики направления
+DROP TABLE IF EXISTS departments CASCADE;
+CREATE TABLE departments (
+   id INT GENERATED ALWAYS AS IDENTITY,   -- Идентификатор научного направления
+   name VARCHAR(50),                      -- Название направления
+   description TEXT                       -- Описание тематики направления
 );
 
 -- Таблица предметных этапов
 
-CREATE TABLE IF NOT EXISTS stages (
-   id SERIAL PRIMARY KEY,              -- Идентификатор этапа
-   departmentId INTEGER NOT NULL,      -- Идентификатор направления
-   name VARCHAR(250) NOT NULL,         -- Название этапа
-   description TEXT,                   -- Описание тематики этапа
+DROP TABLE IF EXISTS stages CASCADE;
+CREATE TABLE stages (
+   id INT GENERATED ALWAYS AS IDENTITY,   -- Идентификатор этапа
+   departmentId INTEGER NOT NULL,         -- Идентификатор направления
+   name VARCHAR(250) NOT NULL,            -- Название этапа
+   description TEXT,                      -- Описание тематики этапа
    FOREIGN KEY (departmentId) REFERENCES departments (id) ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
 -- Таблица уровней сложности задач
 
-CREATE TABLE IF NOT EXISTS levels (
+DROP TABLE IF EXISTS levels CASCADE;
+CREATE TABLE levels (
    id SERIAL PRIMARY KEY,              -- Идентификатор уровня сложности
    name VARCHAR(100) NOT NULL,         -- Название уровня сложности
    max_grade INTEGER NOT NULL          -- Максимально возможная оценка
@@ -68,7 +73,8 @@ CREATE TABLE IF NOT EXISTS levels (
 
 -- Таблица задач
 
-CREATE TABLE IF NOT EXISTS tasks (
+DROP TABLE IF EXISTS tasks CASCADE;
+CREATE TABLE tasks (
    id SERIAL PRIMARY KEY,              -- Идентификатор задачи
    levelId INTEGER NOT NULL,           -- Идентификатор уровня сложности
    stageId INTEGER NOT NULL,           -- Идентификатор предметного этапа
@@ -81,7 +87,8 @@ CREATE TABLE IF NOT EXISTS tasks (
 
 -- Таблица результатов
 
-CREATE TABLE IF NOT EXISTS results (
+DROP TABLE IF EXISTS results CASCADE;
+CREATE TABLE results (
    id SERIAL PRIMARY KEY,              -- Идентификатор результата
    studentId INTEGER NOT NULL,         -- Идентификатор школьника
    teacherId INTEGER NOT NULL,         -- Идентификатор проверяющего учителя
