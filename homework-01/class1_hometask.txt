@@ -1,0 +1,91 @@
+-- 1. Развернуть сервер PostgreSQL в Docker.
+
+/*
+ * Поставил Debian 11 в виртуальной машине VirtualBox.
+ * По умолчанию в системе идет Postges 13.3.
+ * Подключил официальный репозиторий Postgres и обновился до версии 13.4.
+ */
+
+-- 2. Создать пользователя и базу данных.
+
+/*
+ * postgres=# create database golangdb;
+ * CREATE DATABASE
+ * postgres=# create user alex password '*************';
+ * CREATE ROLE
+ * postgres=# grant all privileges on database golangdb to alex;
+ * GRANT
+ */
+
+-- 3. В базе из пункта 2 создать таблицу: не менее трёх столбцов различных типов.
+
+CREATE TABLE users (
+   id SERIAL PRIMARY KEY,
+   lname VARCHAR(50) NOT NULL,
+   fname VARCHAR(50) NOT NULL,
+   email VARCHAR(100) UNIQUE NOT NULL,
+   created_at TIMESTAMP NOT NULL
+);
+
+/*
+ * golangdb=> CREATE TABLE users (
+ * golangdb(> id serial PRIMARY KEY,
+ * golangdb(> lname VARCHAR(50) NOT NULL,
+ * golangdb(> fname VARCHAR(50) NOT NULL,
+ * golangdb(> email VARCHAR(100) UNIQUE NOT NULL,
+ * golangdb(> created_at TIMESTAMP NOT NULL
+ * golangdb(> );
+ * CREATE TABLE
+ */
+
+-- 4. В таблицу из пункта 3 вставить не менее трёх строк.
+
+INSERT INTO users (lname, fname, email, created_at)
+   VALUES ('Петров', 'Петр', 'petrov@example.com', NOW()),
+      ('Иванов', 'Иван', 'ivanov@example.com', NOW()),
+      ('Сергеев', 'Сергей', 'sergeev@example.com', NOW());
+
+/*
+ * golangdb=> INSERT INTO users (lname, fname, email, created_at)
+ * golangdb-> VALUES ('Петров', 'Петр', 'petrov@example.com', NOW()),
+ * golangdb-> ('Иванов', 'Иван', 'ivanov@example.com', NOW()),
+ * golangdb-> ('Сергеев', 'Сергей', 'sergeev@example.com', NOW());
+ * INSERT 0 3
+ *
+ * golangdb=> SELECT * FROM users;
+ *  id |  lname  | fname  |        email        |         created_at         
+ * ----+---------+--------+---------------------+----------------------------
+ *   1 | Петров  | Петр   | petrov@example.com  | 2021-09-26 21:27:59.141712
+ *   2 | Иванов  | Иван   | ivanov@example.com  | 2021-09-26 21:27:59.141712
+ *   3 | Сергеев | Сергей | sergeev@example.com | 2021-09-26 21:27:59.141712
+ * (3 строки)
+ * 
+ */
+
+-- 5. Используя мета-команды psql, вывести список всех сущностей в базе данных из пункта 2.
+
+/*
+ * golangdb=> \d
+ *                    Список отношений
+ *  Схема  |     Имя      |        Тип         | Владелец 
+ * --------+--------------+--------------------+----------
+ *  public | users        | таблица            | alex
+ *  public | users_id_seq | последовательность | alex
+ * (2 строки)
+ * 
+ * golangdb=> \dt
+ *           Список отношений
+ *  Схема  |  Имя  |   Тип   | Владелец 
+ * --------+-------+---------+----------
+ *  public | users | таблица | alex
+ * (1 строка)
+ * 
+ *  golangdb=> \di
+ *                     Список отношений
+ *  Схема  |       Имя       |  Тип   | Владелец | Таблица 
+ * --------+-----------------+--------+----------+---------
+ *  public | users_email_key | индекс | alex     | users
+ *  public | users_pkey      | индекс | alex     | users
+ * (2 строки)
+ * 
+ */
